@@ -1,0 +1,73 @@
+package com.example.myapplication;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+
+public class veritabani extends SQLiteOpenHelper {
+    private static final String TABLE_NAME = "Tbl_Restoranat";
+    private static final String DATABASE_NAME = "db_Menu";
+    private static final int DATABASE_VERSION = 1;
+    private static final String Ad = "Ad";
+    private static final String Soyad = "Soyad";
+    private static final String Secenek = "Secenek";
+
+
+    SQLiteDatabase sqLiteDatabase;
+
+    public veritabani(Context context) {
+        super(context, "db_Menu", (CursorFactory)null, 1);
+    }
+
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE Tbl_Ogrenci (id INTEGER PRIMARY KEY AUTOINCREMENT,Ad TEXT,Soyad TEXT,Secenek TEXT);");
+    }
+
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE İF EXISTS Tbl_Restorant");
+        this.onCreate(db);
+    }
+
+    public void veriSil(String kadi) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Tbl_Restorant", "Ad=?", new String[]{String.valueOf(kadi)});
+        db.close();
+    }
+
+    public void veriEkle(String ad, String soyad,String Secenek) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("Ad", ad.trim());
+        cv.put("Soyad", soyad.trim());
+        cv.put("Secenek", Secenek.trim());
+
+
+        long r = db.insert("Tbl_Restorant", (String)null, cv);
+        if (r > -1L) {
+            Log.i("tag", "İşlem Başarılı");
+        } else {
+            Log.e("tag", "İşlem Başarısız");
+        }
+
+        db.close();
+    }
+
+    public List<String> veriListele() {
+        List<String> veriler = new ArrayList();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] sutunlar = new String[]{"Ad", "Soyad","Secenek"};
+        Cursor cr = db.query("Tbl_Restorant", sutunlar, (String)null, (String[])null, (String)null, (String)null, (String)null);
+
+        while(cr.moveToNext()) {
+            veriler.add(cr.getString(0) + "-" + cr.getString(1));
+        }
+
+        return veriler;
+    }
+}
+
