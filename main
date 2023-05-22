@@ -1,0 +1,106 @@
+package com.example.myapplication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+
+//import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+//import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RadioButton;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Txt_Ad=(EditText)findViewById(R.id.txtİsim);
+        Txt_Soyad=(EditText)findViewById(R.id.txtSoyisim);
+        Rdb_Pizza=(RadioButton) findViewById(R.id.rdb_piz);
+        Rdb_Lahmacun=(RadioButton) findViewById(R.id.rdb_lhm);
+        Rdb_Kebap=(RadioButton) findViewById(R.id.rdb_kbp);
+        Rdb_Hambuger=(RadioButton) findViewById(R.id.rdb_hmb);
+        Rdb_Spagetti=(RadioButton) findViewById(R.id.rdb_spa);
+        Rdb_Kola=(RadioButton) findViewById(R.id.rdb_kol);
+        Rdb_Limonata=(RadioButton) findViewById(R.id.rdb_lmn);
+        Rdb_Sprite=(RadioButton) findViewById(R.id.rdb_spr);
+        Rdb_Ayran=(RadioButton) findViewById(R.id.rdb_ayr);
+        Rdb_Salgam=(RadioButton) findViewById(R.id.rdb_slg);
+
+
+
+        Btn_Ekle=(Button)findViewById(R.id.btnKaydet);
+        Btn_Liste=(Button)findViewById(R.id.btnListele);
+        Btn_Sil=(Button)findViewById(R.id.btnSil);
+        listView=(ListView)findViewById(R.id.veriler);
+
+    }
+
+    Button Btn_Ekle,Btn_Liste,Btn_Sil;
+    EditText Txt_Ad,Txt_Soyad;
+    ListView listView;
+    RadioButton Rdb_Pizza,Rdb_Lahmacun,Rdb_Kebap,Rdb_Hambuger,Rdb_Spagetti
+                ,Rdb_Kola,Rdb_Limonata,Rdb_Sprite,Rdb_Ayran,Rdb_Salgam;
+
+    veritabani veritabani=new veritabani(MainActivity.this);
+    String Secenek="";
+
+    public void BtnEkle_onClick(View v) {
+        veritabani.veriEkle(Txt_Ad.getText().toString(),Txt_Soyad.getText().toString(),Secenek);
+
+        if (Rdb_Pizza.isChecked()){
+            Secenek="Pizza";
+        }
+        else if (Rdb_Lahmacun.isChecked()) {
+            Secenek = "Lahmacun";
+        }
+            else if (Rdb_Kebap.isChecked()){
+                Secenek="Kebap";}
+                else if (Rdb_Hambuger.isChecked()){
+                    Secenek="Hamburger";}
+                    else if (Rdb_Spagetti.isChecked()){
+                        Secenek="Spagetti";}
+                        else if (Rdb_Kola.isChecked()){
+                            Secenek="Kola";}
+                            else if (Rdb_Limonata.isChecked()){
+                                Secenek="Limonata";}
+                                else if (Rdb_Sprite.isChecked()){
+                                    Secenek="Sprite";}
+                                     else if (Rdb_Ayran.isChecked()){
+                                        Secenek="Ayran";}
+                                         else if (Rdb_Salgam.isChecked()){
+                                            Secenek="Şalgam";}
+
+
+        goster();
+    }
+    public void BtnListe_onClick(View v) {
+        goster();
+    }
+
+    void goster (){
+        List<String> Veriler =veritabani.veriListele();
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (MainActivity.this,android.R.layout.activity_list_item,android.R.id.text1,Veriler);
+        listView.setAdapter(adapter);
+    }
+
+    public void BtnSil_onClick(View v) {
+        veritabani.veriSil(Txt_Ad.getText().toString());
+        goster();
+    }
+}
+
+
